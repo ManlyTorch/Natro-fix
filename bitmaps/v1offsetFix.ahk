@@ -1,0 +1,2 @@
+﻿bitmaps["toppollen"] := Gdip_BitmapFromBase64('iVBORw0KGgoAAAANSUhEUgAAACoAAAALCAYAAAAJMx/IAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACRSURBVEhLxZBBCsMwDATzhkDo/1+aEoOMGcZYcgpd8EGzK2XJcfxI5/W5M2xbz7F49CqyfWPbGou+KW07xrZlx4ytZDvGtmXHyPi36Ucmy1Z3+Lph4cpcYRQzNjfG9tNggo2zMX4nc6dnZgsh82ZsnI2xYOZOz9AwMcO5wlbiTrko3yyTZeaFz7kxGv8W+0TRL7TIjSv8kkcUAAAAAElFTkSuQmCC')
+bitmaps["toppollenfill"] := Gdip_CreateBitmap(41,10), pGraphics := Gdip_GraphicsFromImage(bitmaps["toppollenfill"]), Gdip_GraphicsClear(pGraphics, 0xff121517), Gdip_DeleteGraphics(pGraphics)
