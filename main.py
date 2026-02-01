@@ -22,15 +22,6 @@ result = subprocess.run(
     shell=False
 )
 
-fixedVersions = {
-    "bc1e28f4be1f4266": "v1",
-    "ecc9c250281b4c14": "og",
-    "061a1e42291f47eb": "og",
-    "a24f7de245e949c3": "v2",
-    "1588a9c58c674e38": "v2",
-    "889d2588b25a43d1": "v2",
-}
-
 def getPath(relativePath):
     base_path = ""
     if getattr(sys, "frozen", False):
@@ -76,7 +67,13 @@ def showText(text: str):
 
 def attempt_fix(version: str):
     path = get_folder()
-    
+    roblox_version_path = os.environ["LOCALAPPDATA"] + r"\Roblox\Versions\version-" + version
+    if not os.path.exists(roblox_version_path):
+        showText("Roblox version folder not found, please contact me!")
+        return
+
+    roblox_version_path = roblox_version_path + r"\content\fonts"
+
     if not path:
         return
 
@@ -90,8 +87,10 @@ def attempt_fix(version: str):
         dst1 = os.path.join(path + "/offset/bitmaps.ahk")
         dst2 = os.path.join(path + "/inventory/bitmaps.ahk")
 
-        offsetbitmap = offsetFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "offsetFix.ahk"), dst1)
-        planterbitmap = planterFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "planterFix.ahk"), dst2)
+        offsetbitmap = offsetFix = shutil.copyfile(getPath("bitmaps\\" + "offset.ahk"), dst1)
+        planterbitmap = planterFix = shutil.copyfile(getPath("bitmaps\\" + "planter.ahk"), dst2)
+
+        fonts = shutil.copytree(getPath("fonts"), roblox_version_path, dirs_exist_ok=True)
 
         showText("Fix applied! If it doesn't work, it's another issue.")
 
