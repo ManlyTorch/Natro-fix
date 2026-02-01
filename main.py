@@ -64,13 +64,11 @@ def showText(text: str):
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-    window_width = root.winfo_width()
-    window_height = root.winfo_height()
     
     x = (screen_width // 2) - (150)
     y = (screen_height // 2) - (25)
     
-    root.geometry(f"{300}x{50}+{x}+{y}")
+    root.geometry(f"{350}x{50}+{x}+{y}")
 
     root.attributes("-topmost", True)
 
@@ -79,6 +77,9 @@ def showText(text: str):
 def attempt_fix(version: str):
     path = get_folder()
     
+    if not path:
+        return
+
     if path.count("nm_image_assets") <= 0:
         path = path + "/nm_image_assets"
 
