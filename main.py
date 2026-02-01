@@ -97,9 +97,6 @@ def attempt_fix(version: str):
 if result.stdout and result.stdout.count("version-") == 1:
     version = result.stdout.split("version-")[1].replace("\n", "")
 
-    if not fixedVersions[version]:
-        showText("Unknown version, please contact somebody.")
-    else:
-        attempt_fix(version)
+    attempt_fix(version)
 else:
     showText("Roblox version not found, please make sure Roblox is installed.")
