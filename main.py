@@ -69,6 +69,9 @@ if result.stdout and result.stdout.count("version-") == 1:
         root.mainloop()
     else:
         path = get_folder()
+        
+        if path.count("nm_image_assets") >= 1:
+            path = str(Path(path).parent)
 
         dst1 = os.path.join(path + "/nm_image_assets/offset/bitmaps.ahk")
         dst2 = os.path.join(path + "/nm_image_assets/inventory/bitmaps.ahk")
