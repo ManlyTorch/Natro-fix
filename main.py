@@ -42,61 +42,12 @@ def getPath(relativePath):
 
 def get_folder():
     root = tk.Tk()
-    root.withdraw()  # hide the main window
+    root.withdraw()
     folder_path = filedialog.askdirectory(title="Select a folder")
     root.destroy()
     return folder_path
 
-if result.stdout and result.stdout.count("version-") == 1:
-    version = result.stdout.split("version-")[1].replace("\n", "")
-
-    if not fixedVersions[version]:
-        # --- UI ---
-        root = tk.Tk()
-
-        style = ttk.Style(root)
-        style.theme_use("clam")
-        
-        frame = ttk.Frame(root, padding=10)
-        frame.pack(fill="both", expand=True)
-
-        result_label = ttk.Label(
-            frame,
-            text="Unknown version please contact somebody"
-        )
-        result_label.pack(pady=5)
-
-        root.mainloop()
-    else:
-        path = get_folder()
-        
-        if path.count("nm_image_assets") >= 1:
-            path = str(Path(path).parent)
-
-        dst1 = os.path.join(path + "/nm_image_assets/offset/bitmaps.ahk")
-        dst2 = os.path.join(path + "/nm_image_assets/inventory/bitmaps.ahk")
-
-        offsetbitmap = offsetFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "offsetFix.ahk"), dst1)
-        planterbitmap = planterFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "planterFix.ahk"), dst2)
-
-        # --- UI ---
-        root = tk.Tk()
-
-        style = ttk.Style(root)
-        style.theme_use("clam")
-
-        frame = ttk.Frame(root, padding=10)
-        frame.pack(fill="both", expand=True)
-
-        result_label = ttk.Label(
-            frame,
-            text="Should be fixed"
-        )
-        result_label.pack(pady=5)
-
-        root.mainloop()
-else:
-    # --- UI ---
+def showText(text: str):
     root = tk.Tk()
 
     style = ttk.Style(root)
@@ -107,8 +58,48 @@ else:
 
     result_label = ttk.Label(
         frame,
-        text="Incorrect version, program won't work"
+        text=text
     )
     result_label.pack(pady=5)
 
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    window_width = root.winfo_width()
+    window_height = root.winfo_height()
+    
+    x = (screen_width // 2) - (150)
+    y = (screen_height // 2) - (25)
+    
+    root.geometry(f"{300}x{50}+{x}+{y}")
+
+    root.attributes("-topmost", True)
+
     root.mainloop()
+
+def attempt_fix(version: str):
+    path = get_folder()
+    
+    if path.count("nm_image_assets") <= 0:
+        path = path + "/nm_image_assets"
+
+    if not os.path.exists(path + "/offset") or not os.path.exists(path + "/inventory"):
+        showText("Invalid folder selected, please select natro macro folder.\nClose this window and try again.")
+        attempt_fix(version)
+    else:
+        dst1 = os.path.join(path + "/offset/bitmaps.ahk")
+        dst2 = os.path.join(path + "/inventory/bitmaps.ahk")
+
+        offsetbitmap = offsetFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "offsetFix.ahk"), dst1)
+        planterbitmap = planterFix = shutil.copyfile(getPath("bitmaps\\" + fixedVersions[version] + "planterFix.ahk"), dst2)
+
+        showText("Fix applied! If it doesn't work, it's another issue.")
+
+if result.stdout and result.stdout.count("version-") == 1:
+    version = result.stdout.split("version-")[1].replace("\n", "")
+
+    if not fixedVersions[version]:
+        showText("Unknown version, please contact somebody.")
+    else:
+        attempt_fix(version)
+else:
+    showText("Roblox version not found, please make sure Roblox is installed.")
